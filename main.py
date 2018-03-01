@@ -60,13 +60,10 @@ class Car:
     def __init__(self):
         self.location = [0,0]
         self.ridesDone = []
-        self.currentRide = 0
         self.assignedRide = 0
 
     def __repr__(self):
-        if self.currentRide:
-            return "Car currently on Ride <Ride no. {}>".format(self.currentRide)
-        elif self.assignedRide:
+        if self.assignedRide:
             return "Car assigned to Ride <Ride no. {}>".format(self.assignedRide)
         return "Car available at {}".format(self.location)
 
@@ -91,10 +88,12 @@ for i in range(F):
 freePool = carList
 print freePool
 
+completionSchedule = [[] for i in range(T)]
+print completionSchedule
+
 
 def sortRides(rides, freepool, now):
     sorted = False
-
     while not sorted:
         sorted = True
         for i in range(len(rides)-1):
@@ -107,9 +106,23 @@ def sortRides(rides, freepool, now):
                 rides[i], rides[i+1] = rides[i+1], rides[1]
     return rides
 
+
+def assignCarToRide(ride, now):
+    if len(freePool)>0:
+        [nfv, d] = ride.getNFV(freePool)
+        nfv.assignedRide = ride.rideNumber
+        freePool.remove(nfv)
+        print now+d+ride.distance
+        completionSchedule[now+d+ride.distance].append(nfv)
+        nfv.location = ride.finishPoint
+        print nfv
+        rideList.remove(ride)
+
 i = 0
-while(i<=1):
+while(i<T):
     print i
+    freePool.extend(completionSchedule[i])
     sorted_rides = sortRides(rideList, freePool, i)
-    print sorted_rides
+    for r in sorted_rides:
+        assignCarToRide(r, i)
     i+=1
