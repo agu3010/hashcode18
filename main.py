@@ -57,7 +57,8 @@ class Ride:
 
 
 class Car:
-    def __init__(self):
+    def __init__(self, n):
+        self.carNumber = n
         self.location = [0,0]
         self.ridesDone = []
         self.assignedRide = 0
@@ -73,7 +74,7 @@ rideList = []
 
 for i in range(N):
     rideInfo = lines[i].split()
-    ride = Ride(i+1, rideInfo[0], rideInfo[1], rideInfo[2], rideInfo[3], rideInfo[4], rideInfo[5])
+    ride = Ride(i, rideInfo[0], rideInfo[1], rideInfo[2], rideInfo[3], rideInfo[4], rideInfo[5])
     rideList.append(ride)
 
 
@@ -81,7 +82,7 @@ for i in range(N):
 carList = []
 
 for i in range(F):
-    car = Car()
+    car = Car(i+1)
     carList.append(car)
 
 
@@ -117,6 +118,7 @@ def assignCarToRide(ride, now):
         nfv.location = ride.finishPoint
         print nfv
         rideList.remove(ride)
+        nfv.ridesDone.append(ride.rideNumber)
 
 i = 0
 while(i<T):
@@ -126,3 +128,16 @@ while(i<T):
     for r in sorted_rides:
         assignCarToRide(r, i)
     i+=1
+
+
+#Output
+
+k = open("a_example.txt", 'w')
+
+for car in carList:
+    k.write(str(len(car.ridesDone)))
+    k.write(' ')
+    for r in car.ridesDone:
+        k.write( str(r))
+        k.write(' ')
+    k.write('\n')
