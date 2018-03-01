@@ -92,9 +92,24 @@ freePool = carList
 print freePool
 
 
+def sortRides(rides, freepool, now):
+    sorted = False
+
+    while not sorted:
+        sorted = True
+        for i in range(len(rides)-1):
+            this_ride = rides[i]
+            next_ride = rides[i+1]
+            this_ride_profit = (this_ride.distance + B) if this_ride.getBAQ(freepool, now)>=0 else this_ride.distance
+            next_ride_profit = (next_ride.distance + B) if next_ride.getBAQ(freepool, now)>=0 else next_ride.distance
+            if this_ride_profit < next_ride_profit:
+                sorted = False
+                rides[i], rides[i+1] = rides[i+1], rides[1]
+    return rides
+
 i = 0
 while(i<=1):
     print i
-    #sorted_rides = sortRides(rideList, freePool, i)
-    #print sorted_rides
+    sorted_rides = sortRides(rideList, freePool, i)
+    print sorted_rides
     i+=1
